@@ -28,7 +28,4 @@ class DataSet():
 
 def generateData(nsets, npoints = 30, percentage_outliers = .10):
     #number of data sets, number of (x,y) points per data set, percentage of outliers in each dataset
-    bag = [0]*nsets
-    for i in range(nsets):
-        bag[i] = DataSet(npoints, percentage_outliers)
-    return bag
+    return [DataSet(npoints, percentage_outliers) for i in range(nsets)]
