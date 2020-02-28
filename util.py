@@ -29,3 +29,9 @@ class DataSet():
 def generateData(nsets, npoints = 30, percentage_outliers = .10):
     #number of data sets, number of (x,y) points per data set, percentage of outliers in each dataset
     return [DataSet(npoints, percentage_outliers) for i in range(nsets)]
+
+
+def fitLine(x1,x2,y1,y2):
+    m = (y2 - y1)/(x2 - x1)
+    q = y2 - m*x2
+    return [m,q]
