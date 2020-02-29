@@ -26,7 +26,7 @@ class DataSet():
         return [s.m, s.q]
 
 
-def generateData(nsets, npoints = 30, percentage_outliers = .10):
+def generateData(nsets, percentage_outliers = .10, npoints = 30):
     #number of data sets, number of (x,y) points per data set, percentage of outliers in each dataset
     return [DataSet(npoints, percentage_outliers) for i in range(nsets)]
 
