@@ -35,3 +35,12 @@ def fitLine(x1,x2,y1,y2):
     m = (y2 - y1)/(x2 - x1)
     q = y2 - m*x2
     return [m,q]
+
+def mprint(arg1, arg2, score):
+    print(arg1)
+    print(arg2)
+    print(score)
+    print('separator')
+    
+def almost_equals(mm,mq,gm,gq, ε ):
+    return (abs(mm-gm) < ε and abs(mq-gq) < ε )

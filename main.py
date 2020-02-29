@@ -11,7 +11,8 @@ from net import Net
 import torch
 import torch.optim as optim
 from random import randint
-import torch.nn.functional as F
+from util import mprint as mprint
+from util import almost_equals as almost_equals
 
 datadim = 29
 
@@ -21,7 +22,7 @@ def rd(n):
 number_training = 1000
 number_batch = 50
 number_hypotheses = 10
-number_epochs = 2
+number_epochs = 1
 
 net = Net()
 optimizer = optim.SGD(net.parameters(), lr = 0.001)
@@ -33,9 +34,8 @@ def length(lt):
     return len(lt) - 1
 
 avg_loss = torch.zeros(1,1)
-train = 0
+train = 1
 if(train):
-    
     for e in range(number_epochs):
         t = 0
         while(1):
@@ -67,7 +67,7 @@ if(train):
                     #now calculate the loss
                     loss[0][i//2] = (m - gm)**2 + (q - gq)**2
                 #finally calculate the expected loss of this example
-                scores_n = F.softmax(scores[0,:])
+                scores_n = torch.softmax(scores[0,:], dim = 0)
                 exp_loss = loss[0,:].dot(scores_n)
                 #print(exp_loss)
                 LOSS += exp_loss
@@ -84,9 +84,13 @@ if(train):
 print('net trained')
 print('now testing')
 
-test_set = gd(30)
+
+number_test = 30
+test_set = gd(number_test)
+number_correct = 0
+ε = 1e-4
 with(torch.no_grad()):
-    for t in range(30):
+    for t in range(number_test):
         example = test_set[t]
         x = example.x[0,:]
         y = example.y[0,:]
@@ -109,11 +113,13 @@ with(torch.no_grad()):
             score = net(inliers)
             if(score > maxscore):
                 maxscore = score
-                maxparams = [m,q]
+                mm = m.item()
+                mq = q.item()
+        #mprint([mm,mq], [gm,gq], maxscore)
+        if(almost_equals(mm,mq,gm,gq,ε)):
+            number_correct += 1
+            
+print('% correct: ' + str(number_correct/number_test * 100))
 
-        print([maxparams[0].item(), maxparams[1].item()])
-        print([gm,gq])
-        print(maxscore)
-        print('sep')
             
     
